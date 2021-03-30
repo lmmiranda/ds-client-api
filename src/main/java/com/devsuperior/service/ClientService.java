@@ -55,7 +55,8 @@ public class ClientService {
 	
 	@Transactional
 	public ClientDTO updateElement(Long id, ClientDTO clientDTO) {
-		try {
+		
+		if (clientRepository.existsById(id)) {
 			clientDTO.setId(id);
 			
 			Client client = clientRepository.getOne(id);
@@ -63,7 +64,7 @@ public class ClientService {
 			client = clientRepository.save(client);
 			
 			return convertToDTO(client);
-		} catch (EntityNotFoundException e) {
+		} else {
 			throw new ResourceNotFoundException(String.format("Resource not found for id: %s", id));
 		}
 	}
